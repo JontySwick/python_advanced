@@ -1,4 +1,8 @@
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.models import db
+from app.models.categories import Category
 
 
 class Question(db.Model):
@@ -6,6 +10,8 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(255), nullable=False)
     responses = db.relationship('Response', backref='question', lazy=True)
+    category: Mapped[Category] = relationship(back_populates="categories")
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 
     def __repr__(self):
         return f'Question: {self.text}'
