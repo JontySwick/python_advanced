@@ -1,5 +1,6 @@
 # Разработать систему регистрации пользователя, используя Pydantic для валидации входных данных,
 # обработки вложенных структур и сериализации. Система должна обрабатывать данные в формате JSON.
+from pydantic import ValidationError
 from hw2.models.user import User
 
 
@@ -10,10 +11,10 @@ from hw2.models.user import User
 def persist_data(data: str) -> str|None:
     try:
         user = User.model_validate_json(data)
-        return user.model_dump_json(indent=4)
-    except ValueError as e:
+    except ValidationError as e:
         print(e)
-        return None
+    else:
+        return user.model_dump_json(indent=4)
 
 
 # 4. Написать несколько примеров JSON строк для проверки различных сценариев валидации:

@@ -22,12 +22,7 @@ class User(BaseModel):
     def validate_is_employed(cls, is_employed: bool, info: ValidationInfo) -> bool:
         # 3. Добавить кастомный валидатор для проверки соответствия возраста и статуса занятости пользователя.
         # * Проверка, что если пользователь указывает, что он занят (is_employed = true), его возраст должен быть от 18 до 65 лет.
-        if is_employed:
-            age = info.data['age']
-
-            if age < 18:
-                raise ValueError("User must be at least 18 years old.")
-            elif age > 65:
-                raise ValueError("User must be at most 65 years old.")
+        if is_employed and not 18 < info.data['age'] < 65:
+            raise ValueError("User age must be between 18 and 65 years")
 
         return is_employed
